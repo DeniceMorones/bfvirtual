@@ -3,15 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Novio Virtual - MEF con Imagenes Estaticas</title>
+    <title>Virtual Boyfriend</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="particles.js"></script>
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
-      @import url('https://fonts.googleapis.com/css2?family=Vidaloka&display=swap');
+      @import url("https://fonts.googleapis.com/css2?family=Vidaloka&display=swap");
       body {
-        font-family: 'Vidaloka', 'serif';
-        background: linear-gradient(135deg, #f0f4f8 0%, #e0e7f0 100%);
+        font-family: "Vidaloka", "serif";
+        background: "#191924";
         min-height: 100vh;
+      }
+      #particles-js {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1; /* Detrás del contenido principal */
+        background-color: #1c1c26;
+        background-image: url("");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50% 50%;
+      }
+      .main-content {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 4xl;
+        margin: auto;
       }
       .card {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -61,18 +82,23 @@
               "secondary-gray": "#53535C",
               "primary-gray": "#F0F1F7",
               "terciary-gray": "#D5D5DE",
-              "title-gray": "#1C1C26"            },
+              "title-gray": "#1C1C26",
+            },
           },
           fontFamily: {
-            title: ['DM Serif Display', "serif"],
-            body: ['Vidaloka', 'serif']
+            title: ["DM Serif Display", "serif"],
+            body: ["Vidaloka", "serif"],
           },
         },
       };
     </script>
   </head>
-  <body class="flex flex-col items-center p-4">
-    <div class="w-full max-w-4xl bg-white card rounded-3xl p-6 md:p-10 mt-8">
+  <body class="flex flex-col items-center p-4 bg-title-gray min-h-screen">
+    <div id="particles-js"></div>
+
+    <div
+      class="main-content w-full max-w-4xl bg-white card rounded-3xl p-6 md:p-10 mt-8"
+    >
       <h1
         class="text-5xl md:text-5xl font-title font-extrabold text-title-gray text-center mb-6"
       >
@@ -88,7 +114,7 @@
       <!-- Área del Novio / Display -->
       <div
         id="boyfriend-display"
-        class="relative flex flex-col items-center justify-center p-8 mb-10 rounded-2xl bg-gradient-to-br from-primary-gray to-terciary-gray  transition-all duration-500 min-h-[300px] shadow-lg"
+        class="relative flex flex-col items-center justify-center p-8 mb-10 rounded-2xl bg-gradient-to-br from-primary-gray to-terciary-gray transition-all duration-500 min-h-[300px] shadow-lg"
       >
         <!-- Avatar (Imagen estática) -->
         <div
@@ -417,11 +443,7 @@
         updateUI(currentStateId, outputText);
       }
 
-      /**
-       * Actualiza los elementos visuales (estado, imagen y mensaje)
-       * @param {number} newStateId - El ID del nuevo estado.
-       * @param {string} message - El mensaje de la reacción.
-       */
+     
       function updateUI(newStateId, message) {
         const newState = STATES.find((s) => s.id === newStateId);
         const newStateName = newState?.name || "Desconocido";
@@ -429,15 +451,12 @@
           newState?.imageUrl ||
           "https://placehold.co/160x160/000000/ffffff?text=ERROR";
 
-        // 1. Actualizar texto del estado y mensaje
         currentStateText.textContent = `${newStateId}. ${newStateName}`;
         outputMessage.textContent = message;
 
-        // 2. Aplicar la nueva imagen (directamente, sin carga de IA)
         boyfriendImage.classList.add("animate-pulse-once"); // Simular una pequeña animación de reacción
 
         boyfriendImage.onload = () => {
-          // Remover animación después de que la imagen se ha cargado
           setTimeout(() => {
             boyfriendImage.classList.remove("animate-pulse-once");
           }, 500);
@@ -445,13 +464,11 @@
 
         boyfriendImage.src = imageUrl;
 
-        // 3. Actualizar borde de color
         const oldBorderClass = displayDiv.className.match(/border-state-\d+/);
         if (oldBorderClass) {
           displayDiv.classList.remove(oldBorderClass[0]);
         }
         const newBorderClass = `border-state-${newStateId}`;
-        // Comprueba si la clase de estilo existe antes de añadirla (solo para los estados principales)
         if (
           document.head
             .querySelector(`style`)
@@ -463,7 +480,6 @@
         }
       }
 
-      // Agregar la animación CSS para el efecto de reacción
       const style = document.createElement("style");
       style.innerHTML += `
             @keyframes pulse-once {
@@ -477,7 +493,125 @@
         `;
       document.head.appendChild(style);
 
-      window.onload = initializeUI;
+      function initializeParticles() {
+        particlesJS("particles-js", {
+          particles: {
+            number: {
+              value: 203,
+              density: {
+                enable: true,
+                value_area: 2239.104358256698,
+              },
+            },
+            color: {
+              value: "#ffffff",
+            },
+            shape: {
+              type: "star",
+              stroke: {
+                width: 4,
+                color: "#ffffff",
+              },
+              polygon: {
+                nb_sides: 5,
+              },
+              image: {
+                src: "img/github.svg",
+                width: 100,
+                height: 100,
+              },
+            },
+            opacity: {
+              value: 0.5,
+              random: false,
+              anim: {
+                enable: false,
+                speed: 1,
+                opacity_min: 0.1,
+                sync: false,
+              },
+            },
+            size: {
+              value: 15.993602558976416,
+              random: true,
+              anim: {
+                enable: false,
+                speed: 264.8566777091113,
+                size_min: 2.42987777714781,
+                sync: false,
+              },
+            },
+            line_linked: {
+              enable: false,
+              distance: 31.987205117952833,
+              color: "#ffffff",
+              opacity: 0.4,
+              width: 1,
+            },
+            move: {
+              enable: true,
+              speed: 6,
+              direction: "none",
+              random: false,
+              straight: false,
+              out_mode: "out",
+              bounce: false,
+              attract: {
+                enable: false,
+                rotateX: 600,
+                rotateY: 1200,
+              },
+            },
+          },
+          interactivity: {
+            detect_on: "canvas",
+            events: {
+              onhover: {
+                enable: true,
+                mode: "repulse",
+              },
+              onclick: {
+                enable: true,
+                mode: "push",
+              },
+              resize: true,
+            },
+            modes: {
+              grab: {
+                distance: 400,
+                line_linked: {
+                  opacity: 1,
+                },
+              },
+              bubble: {
+                distance: 400,
+                size: 40,
+                duration: 2,
+                opacity: 8,
+                speed: 3,
+              },
+              repulse: {
+                distance: 200,
+                duration: 0.4,
+              },
+              push: {
+                particles_nb: 4,
+              },
+              remove: {
+                particles_nb: 2,
+              },
+            },
+          },
+          retina_detect: false,
+        });
+      }
+
+      //window.onload = initializeUI;
+
+      window.onload = () => {
+        initializeUI();
+        initializeParticles();
+      };
     </script>
   </body>
 </html>
