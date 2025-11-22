@@ -1,308 +1,362 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Novio Virtual - MEF con Imagenes Estaticas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f0f4f8 0%, #e0e7f0 100%);
-            min-height: 100vh;
-        }
-        .card {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        .input-button {
-            transition: transform 0.1s, box-shadow 0.1s;
-        }
-        .input-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 100, 150, 0.4);
-        }
-        .input-button:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 10px rgba(255, 100, 150, 0.2);
-        }
-        
-        /* Clases de borde personalizadas para los estados principales */
-        .border-state-0 { border-color: #3b82f6; } /* Normal - Blue */
-        .border-state-1 { border-color: #ef4444; } /* Triste - Red */
-        .border-state-2 { border-color: #10b981; } /* Feliz - Green */
-        .border-state-3 { border-color: #f59e0b; } /* Molesto - Amber */
-        .border-state-9 { border-color: #ec4899; } /* Enamorado - Pink */
-        .border-state-11 { border-color: #991b1b; } /* Celoso - Dark Red */
-        .border-state-15 { border-color: #34d399; } /* Agradecido - Mint */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+      @import url('https://fonts.googleapis.com/css2?family=Vidaloka&display=swap');
+      body {
+        font-family: 'Vidaloka', 'serif';
+        background: linear-gradient(135deg, #f0f4f8 0%, #e0e7f0 100%);
+        min-height: 100vh;
+      }
+      .card {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+      .input-button {
+        transition: transform 0.1s, box-shadow 0.1s;
+      }
+      .input-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 100, 150, 0.4);
+      }
+      .input-button:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 10px rgba(255, 100, 150, 0.2);
+      }
+
+      /* Clases de borde personalizadas para los estados principales */
+      .border-state-0 {
+        border-color: #3b82f6;
+      } /* Normal - Blue */
+      .border-state-1 {
+        border-color: #ef4444;
+      } /* Triste - Red */
+      .border-state-2 {
+        border-color: #10b981;
+      } /* Feliz - Green */
+      .border-state-3 {
+        border-color: #f59e0b;
+      } /* Molesto - Amber */
+      .border-state-9 {
+        border-color: #ec4899;
+      } /* Enamorado - Pink */
+      .border-state-11 {
+        border-color: #991b1b;
+      } /* Celoso - Dark Red */
+      .border-state-15 {
+        border-color: #34d399;
+      } /* Agradecido - Mint */
     </style>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-pink': '#ec4899',
-                        'secondary-gray': '#6b7280',
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "primary-pink": "#323240",
+              "secondary-gray": "#53535C",
+              "primary-gray": "#F0F1F7",
+              "terciary-gray": "#D5D5DE",
+              "title-gray": "#1C1C26"            },
+          },
+          fontFamily: {
+            title: ['DM Serif Display', "serif"],
+            body: ['Vidaloka', 'serif']
+          },
+        },
+      };
     </script>
-</head>
-<body class="flex flex-col items-center p-4">
-
+  </head>
+  <body class="flex flex-col items-center p-4">
     <div class="w-full max-w-4xl bg-white card rounded-3xl p-6 md:p-10 mt-8">
-        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 text-center mb-6">
-            Mi Novio Virtual (Modo Estático) 💖
-        </h1>
-        <p class="text-secondary-gray text-center mb-8">
-            Usa tus propias imágenes. Edita el array `STATES` en el código JavaScript con tus URLs.
+      <h1
+        class="text-5xl md:text-5xl font-title font-extrabold text-title-gray text-center mb-6"
+      >
+        My Virtual Boyfriend
+      </h1>
+      <p class="text-secondary-gray text-center mb-8">
+        Tú eliges una Acción (Entrada), como "Abrazar", "Bromear" o "Criticar".
+        Tu Novio Virtual procesa esa acción, y su Estado de Ánimo (S) cambia de
+        inmediato. Al mismo tiempo, te da una Reacción (Salida), como "Se
+        Sonroja", "Grita" o "Pone Atención".
+      </p>
+
+      <!-- Área del Novio / Display -->
+      <div
+        id="boyfriend-display"
+        class="relative flex flex-col items-center justify-center p-8 mb-10 rounded-2xl bg-gradient-to-br from-primary-gray to-terciary-gray  transition-all duration-500 min-h-[300px] shadow-lg"
+      >
+        <!-- Avatar (Imagen estática) -->
+        <div
+          id="avatar-container"
+          class="w-40 h-40 mb-4 transition-transform duration-500 flex items-center justify-center"
+        >
+          <img
+            id="boyfriend-image"
+            src=""
+            alt="Novio Virtual Avatar"
+            class="rounded-full w-full h-full object-cover shadow-lg transition-opacity duration-300"
+          />
+        </div>
+
+        <!-- Salida/Reacción (Lo que dice o hace) -->
+        <p
+          id="output-message"
+          class="text-xl md:text-2xl font-semibold text-secondary-gray text-center mb-3 transition-opacity duration-300"
+        >
+          ¡Hola! El modelo 16x16 está listo para usar tus imágenes.
         </p>
 
-        <!-- Área del Novio / Display -->
-        <div id="boyfriend-display" class="relative flex flex-col items-center justify-center p-8 mb-10 rounded-2xl bg-gradient-to-br from-pink-50 to-pink-100 border-2 border-state-0 transition-all duration-500 min-h-[300px] shadow-lg">
-            
-            <!-- Avatar (Imagen estática) -->
-            <div id="avatar-container" class="w-40 h-40 mb-4 transition-transform duration-500 flex items-center justify-center">
-                <img id="boyfriend-image" src="" alt="Novio Virtual Avatar" class="rounded-full w-full h-full object-cover shadow-lg transition-opacity duration-300">
-            </div>
-
-            <!-- Salida/Reacción (Lo que dice o hace) -->
-            <p id="output-message" class="text-xl md:text-2xl font-semibold text-gray-700 text-center mb-3 transition-opacity duration-300">
-                ¡Hola! El modelo 16x16 está listo para usar tus imágenes.
-            </p>
-
-            <!-- Estado Actual -->
-            <div class="absolute top-4 right-4 bg-white rounded-full px-4 py-1 shadow-md border-2 border-state-0 transition-colors duration-500">
-                <span class="text-sm font-medium text-gray-600">Estado:</span>
-                <span id="current-state-text" class="text-sm font-bold text-gray-800 ml-1">0. Normal</span>
-            </div>
+        <!-- Estado Actual -->
+        <div
+          class="absolute top-4 right-4 bg-white rounded-full px-4 py-1 shadow-md transition-colors duration-500"
+        >
+          <span class="text-sm font-medium text-gray-600">Estado:</span>
+          <span
+            id="current-state-text"
+            class="text-sm font-bold text-title-gray ml-1"
+            >0. Normal</span
+          >
         </div>
-        
-        <!-- Botones de Interacción (Entradas) -->
-        <h2 class="text-xl font-bold text-gray-700 mb-4 border-b pb-2">Acciones (Entradas)</h2>
-        <div id="input-buttons-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            <!-- Los botones se generarán con JavaScript -->
+      </div>
+
+      <!-- Botones de Interacción (Entradas) -->
+      <h2 class="text-xl font-bold text-gray-700 mb-4 border-b pb-2">
+        Acciones (Entradas)
+      </h2>
+      <div
+        id="input-buttons-container"
+        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
+      >
+        <!-- Los botones se generarán con JavaScript -->
+      </div>
+
+      <!-- Leyendas de Estados y Salidas (Opcional, para referencia) -->
+      <details class="mt-8 p-4 bg-gray-50 rounded-xl">
+        <summary class="font-bold text-primary-pink cursor-pointer">
+          Ver Leyendas de Estados, Entradas y Salidas (16x16)
+        </summary>
+        <div
+          class="mt-3 text-sm text-gray-600 grid grid-cols-1 md:grid-cols-3 gap-4"
+        >
+          <div>
+            <h3 class="font-bold mb-1">16 Estados (S)</h3>
+            <ul id="state-list" class="list-disc pl-5"></ul>
+          </div>
+          <div>
+            <h3 class="font-bold mb-1">16 Entradas (I)</h3>
+            <ul id="input-list" class="list-disc pl-5"></ul>
+          </div>
+          <div>
+            <h3 class="font-bold mb-1">16 Salidas (O)</h3>
+            <ul id="output-list" class="list-disc pl-5"></ul>
+          </div>
         </div>
-
-        <!-- Leyendas de Estados y Salidas (Opcional, para referencia) -->
-        <details class="mt-8 p-4 bg-gray-50 rounded-xl">
-            <summary class="font-bold text-primary-pink cursor-pointer">Ver Leyendas de Estados, Entradas y Salidas (16x16)</summary>
-            <div class="mt-3 text-sm text-gray-600 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <h3 class="font-bold mb-1">16 Estados (S)</h3>
-                    <ul id="state-list" class="list-disc pl-5"></ul>
-                </div>
-                <div>
-                    <h3 class="font-bold mb-1">16 Entradas (I)</h3>
-                    <ul id="input-list" class="list-disc pl-5"></ul>
-                </div>
-                <div>
-                    <h3 class="font-bold mb-1">16 Salidas (O)</h3>
-                    <ul id="output-list" class="list-disc pl-5"></ul>
-                </div>
-            </div>
-        </details>
-
+      </details>
     </div>
 
     <!-- Lógica de la Máquina de Estado Finito (MEF) -->
     <script>
-        // ===============================================
-        // DATOS DE LA MÁQUINA DE ESTADO FINITO (MEF)
-        // ===============================================
+      // ===============================================
+      // DATOS DE LA MÁQUINA DE ESTADO FINITO (MEF)
+      // ===============================================
 
-        // 1. Definición de Estados (16 en total)
-        // ATENCIÓN: Para usar tus propias imágenes, reemplaza la URL en la propiedad 'imageUrl'
-        const STATES = [
-            // Puedes usar URLs de imágenes subidas a Canvas o externas, o simples placeholders.
-            { 
-                id: 0, 
-                name: "Normal", 
-                imageUrl: "img/normal.png" // Reemplaza esta URL
-            },
-            { 
-                id: 1, 
-                name: "Triste", 
-                imageUrl: "img/triste.png" // Reemplaza esta URL
-            },
-            { 
-                id: 2, 
-                name: "Feliz", 
-                imageUrl: "img/feliz.png" // Reemplaza esta URL
-            },
-            { 
-                id: 3, 
-                name: "Molesto", 
-                imageUrl: "img/molesto.png" // Reemplaza esta URL
-            },
-            { 
-                id: 4, 
-                name: "Confundido", 
-                imageUrl: "img/confundido.png" // Reemplaza esta URL
-            },
-            { 
-                id: 5, 
-                name: "Concentrado", 
-                imageUrl: "img/concentrado.png" // Reemplaza esta URL
-            },
-            { 
-                id: 6, 
-                name: "Asustado", 
-                imageUrl: "img/asustado.png" // Reemplaza esta URL
-            },
-            { 
-                id: 7, 
-                name: "Indiferente", 
-                imageUrl: "img/indiferente.png" // Reemplaza esta URL
-            },
-            { 
-                id: 8, 
-                name: "Relajado", 
-                imageUrl: "img/relajado.png" // Reemplaza esta URL
-            },
-            { 
-                id: 9, 
-                name: "Enamorado", 
-                imageUrl: "img/enamorado.png" // Reemplaza esta URL
-            },
-            { 
-                id: 10, 
-                name: "Curioso", 
-                imageUrl: "img/curioso.png" // Reemplaza esta URL
-            },
-            { 
-                id: 11, 
-                name: "Celoso", 
-                imageUrl: "img/celoso.png" // Reemplaza esta URL
-            },
-            { 
-                id: 12, 
-                name: "Esperanzado", 
-                imageUrl: "img/esperanzado.png" // Reemplaza esta URL
-            },
-            { 
-                id: 13, 
-                name: "Agotado", 
-                imageUrl: "img/agotado.png" // Reemplaza esta URL
-            },
-            { 
-                id: 14, 
-                name: "Juguetón", 
-                imageUrl: "img/jugueton.png" // Reemplaza esta URL
-            },
-            { 
-                id: 15, 
-                name: "Agradecido", 
-                imageUrl: "img/agradecido.png" // Reemplaza esta URL
-            },
-        ];
+      // 1. Definición de Estados (16 en total)
+      // ATENCIÓN: Para usar tus propias imágenes, reemplaza la URL en la propiedad 'imageUrl'
+      const STATES = [
+        // Puedes usar URLs de imágenes subidas a Canvas o externas, o simples placeholders.
+        {
+          id: 0,
+          name: "Normal",
+          imageUrl: "img/normal.png", // Reemplaza esta URL
+        },
+        {
+          id: 1,
+          name: "Triste",
+          imageUrl: "img/triste.png", // Reemplaza esta URL
+        },
+        {
+          id: 2,
+          name: "Feliz",
+          imageUrl: "img/feliz.png", // Reemplaza esta URL
+        },
+        {
+          id: 3,
+          name: "Molesto",
+          imageUrl: "img/molesto.png", // Reemplaza esta URL
+        },
+        {
+          id: 4,
+          name: "Confundido",
+          imageUrl: "img/confundido.png", // Reemplaza esta URL
+        },
+        {
+          id: 5,
+          name: "Concentrado",
+          imageUrl: "img/concentrado.png", // Reemplaza esta URL
+        },
+        {
+          id: 6,
+          name: "Asustado",
+          imageUrl: "img/asustado.png", // Reemplaza esta URL
+        },
+        {
+          id: 7,
+          name: "Indiferente",
+          imageUrl: "img/indiferente.png", // Reemplaza esta URL
+        },
+        {
+          id: 8,
+          name: "Relajado",
+          imageUrl: "img/relajado.png", // Reemplaza esta URL
+        },
+        {
+          id: 9,
+          name: "Enamorado",
+          imageUrl: "img/enamorado.png", // Reemplaza esta URL
+        },
+        {
+          id: 10,
+          name: "Curioso",
+          imageUrl: "img/curioso.png", // Reemplaza esta URL
+        },
+        {
+          id: 11,
+          name: "Celoso",
+          imageUrl: "img/celoso.png", // Reemplaza esta URL
+        },
+        {
+          id: 12,
+          name: "Esperanzado",
+          imageUrl: "img/esperanzado.png", // Reemplaza esta URL
+        },
+        {
+          id: 13,
+          name: "Agotado",
+          imageUrl: "img/agotado.png", // Reemplaza esta URL
+        },
+        {
+          id: 14,
+          name: "Juguetón",
+          imageUrl: "img/jugueton.png", // Reemplaza esta URL
+        },
+        {
+          id: 15,
+          name: "Agradecido",
+          imageUrl: "img/agradecido.png", // Reemplaza esta URL
+        },
+      ];
 
-        // 2. Definición de Entradas (16 en total)
-        const INPUTS = [
-            { id: 0, name: "Consentir" },
-            { id: 1, name: "Llamar" },
-            { id: 2, name: "Humillar" },
-            { id: 3, name: "Abrazar" },
-            { id: 4, name: "Amenazar" },
-            { id: 5, name: "Golpear" },
-            { id: 6, name: "Acariciar" },
-            { id: 7, name: "Animar" },
-            { id: 8, name: "Coquetear" },
-            { id: 9, name: "Conversar" },
-            { id: 10, name: "Bromear" },
-            { id: 11, name: "Ignorar" },
-            { id: 12, name: "Ofrecer Apoyo" },
-            { id: 13, name: "Invitar a Salir" },
-            { id: 14, name: "Criticar" },
-            { id: 15, name: "Elogiar" },
-        ];
+      // 2. Definición de Entradas (16 en total)
+      const INPUTS = [
+        { id: 0, name: "Consentir" },
+        { id: 1, name: "Llamar" },
+        { id: 2, name: "Humillar" },
+        { id: 3, name: "Abrazar" },
+        { id: 4, name: "Amenazar" },
+        { id: 5, name: "Golpear" },
+        { id: 6, name: "Acariciar" },
+        { id: 7, name: "Animar" },
+        { id: 8, name: "Coquetear" },
+        { id: 9, name: "Conversar" },
+        { id: 10, name: "Bromear" },
+        { id: 11, name: "Ignorar" },
+        { id: 12, name: "Ofrecer Apoyo" },
+        { id: 13, name: "Invitar a Salir" },
+        { id: 14, name: "Criticar" },
+        { id: 15, name: "Elogiar" },
+      ];
 
-        // 3. Definición de Salidas (16 en total)
-        const OUTPUTS = [
-            { id: 0, name: "Sonríe" },
-            { id: 1, name: "Agradece" },
-            { id: 2, name: "Grita" },
-            { id: 3, name: "Abraza" },
-            { id: 4, name: "Ignora" },
-            { id: 5, name: "Escucha" },
-            { id: 6, name: "Golpea" },
-            { id: 7, name: "Se Sonroja" },
-            { id: 8, name: "Llora" },
-            { id: 9, name: "Ofende" },
-            { id: 10, name: "Pone Atención" },
-            { id: 11, name: "Amenaza" },
-            { id: 12, name: "Risita Sarcástica" }, 
-            { id: 13, name: "Pregunta Curiosa" },
-            { id: 14, name: "Suspira Profundamente" },
-            { id: 15, name: "Bosteza Ruidosamente" },
-        ];
-        
-        // 4. Función de Transición f (Próximo Estado) - Matriz 16x16 (SIN CAMBIOS)
-        const f_NEXT_STATE = [
-            [2, 0, 3, 3, 2, 3, 7, 2, 9, 0, 14, 7, 8, 9, 3, 2],
-            [0, 1, 1, 6, 2, 6, 4, 2, 7, 1, 13, 1, 12, 0, 1, 8],
-            [2, 5, 4, 3, 9, 3, 9, 2, 9, 2, 14, 5, 8, 9, 3, 2],
-            [8, 7, 3, 3, 0, 3, 7, 8, 7, 7, 11, 3, 0, 3, 3, 0],
-            [0, 5, 1, 6, 8, 6, 4, 8, 9, 4, 10, 7, 12, 9, 1, 8],
-            [2, 5, 3, 3, 2, 3, 0, 5, 9, 5, 10, 7, 8, 9, 11, 2],
-            [0, 5, 1, 6, 8, 6, 8, 8, 4, 5, 13, 6, 12, 1, 1, 8],
-            [0, 7, 7, 3, 8, 3, 7, 0, 7, 7, 10, 7, 8, 0, 3, 8],
-            [2, 5, 0, 3, 2, 3, 9, 2, 9, 8, 14, 7, 8, 9, 3, 2],
-            [9, 9, 5, 1, 4, 9, 6, 2, 9, 5, 14, 11, 9, 9, 3, 2],
-            [8, 5, 3, 2, 6, 3, 10, 12, 9, 5, 14, 7, 8, 9, 3, 2],
-            [1, 11, 3, 1, 3, 3, 1, 0, 11, 13, 3, 11, 1, 3, 11, 3],
-            [9, 0, 1, 9, 6, 6, 9, 12, 9, 10, 14, 7, 12, 9, 3, 2],
-            [8, 13, 7, 8, 6, 13, 8, 0, 14, 13, 15, 13, 8, 13, 7, 8],
-            [2, 10, 3, 2, 14, 3, 2, 2, 9, 10, 14, 7, 8, 9, 3, 2],
-            [2, 0, 4, 2, 4, 4, 2, 2, 9, 8, 14, 7, 8, 9, 3, 2]
-        ];
+      // 3. Definición de Salidas (16 en total)
+      const OUTPUTS = [
+        { id: 0, name: "Sonríe" },
+        { id: 1, name: "Agradece" },
+        { id: 2, name: "Grita" },
+        { id: 3, name: "Abraza" },
+        { id: 4, name: "Ignora" },
+        { id: 5, name: "Escucha" },
+        { id: 6, name: "Golpea" },
+        { id: 7, name: "Se Sonroja" },
+        { id: 8, name: "Llora" },
+        { id: 9, name: "Ofende" },
+        { id: 10, name: "Pone Atención" },
+        { id: 11, name: "Amenaza" },
+        { id: 12, name: "Risita Sarcástica" },
+        { id: 13, name: "Pregunta Curiosa" },
+        { id: 14, name: "Suspira Profundamente" },
+        { id: 15, name: "Bosteza Ruidosamente" },
+      ];
 
-        // 5. Función de Salida g (Reacción) - Matriz 16x16 (SIN CAMBIOS)
-        const g_OUTPUT = [
-            [0, 10, 9, 12, 3, 6, 4, 1, 7, 5, 0, 4, 1, 7, 9, 0],
-            [4, 4, 4, 11, 3, 11, 4, 0, 4, 4, 8, 4, 10, 14, 9, 1],
-            [0, 10, 4, 12, 3, 6, 3, 0, 3, 5, 0, 4, 1, 7, 9, 0],
-            [0, 4, 9, 12, 1, 6, 4, 0, 4, 4, 11, 9, 4, 11, 9, 12],
-            [0, 10, 4, 2, 3, 8, 4, 1, 3, 5, 13, 4, 10, 7, 9, 1],
-            [7, 10, 9, 12, 3, 6, 7, 1, 3, 5, 13, 4, 10, 7, 9, 0],
-            [1, 10, 4, 11, 3, 8, 0, 1, 4, 5, 14, 11, 10, 8, 9, 1],
-            [0, 4, 4, 12, 0, 6, 3, 1, 4, 4, 15, 4, 10, 14, 9, 12],
-            [0, 10, 4, 12, 3, 12, 3, 1, 3, 5, 0, 4, 1, 7, 9, 0],
-            [7, 10, 4, 11, 3, 2, 3, 0, 3, 5, 7, 12, 10, 7, 9, 0],
-            [1, 13, 9, 3, 11, 6, 0, 13, 7, 5, 13, 4, 10, 7, 9, 1],
-            [8, 12, 9, 8, 11, 6, 4, 4, 12, 14, 12, 9, 4, 11, 9, 12],
-            [7, 10, 8, 3, 11, 2, 3, 0, 7, 13, 0, 4, 10, 7, 9, 0],
-            [1, 15, 4, 3, 11, 6, 1, 0, 12, 15, 15, 4, 10, 14, 9, 1],
-            [0, 13, 12, 3, 11, 6, 0, 0, 7, 13, 0, 4, 1, 7, 9, 0],
-            [0, 10, 4, 3, 4, 4, 0, 0, 7, 5, 0, 4, 1, 7, 9, 0]
-        ];
+      // 4. Función de Transición f (Próximo Estado) - Matriz 16x16 (SIN CAMBIOS)
+      const f_NEXT_STATE = [
+        [2, 0, 3, 3, 2, 3, 7, 2, 9, 0, 14, 7, 8, 9, 3, 2],
+        [0, 1, 1, 6, 2, 6, 4, 2, 7, 1, 13, 1, 12, 0, 1, 8],
+        [2, 5, 4, 3, 9, 3, 9, 2, 9, 2, 14, 5, 8, 9, 3, 2],
+        [8, 7, 3, 3, 0, 3, 7, 8, 7, 7, 11, 3, 0, 3, 3, 0],
+        [0, 5, 1, 6, 8, 6, 4, 8, 9, 4, 10, 7, 12, 9, 1, 8],
+        [2, 5, 3, 3, 2, 3, 0, 5, 9, 5, 10, 7, 8, 9, 11, 2],
+        [0, 5, 1, 6, 8, 6, 8, 8, 4, 5, 13, 6, 12, 1, 1, 8],
+        [0, 7, 7, 3, 8, 3, 7, 0, 7, 7, 10, 7, 8, 0, 3, 8],
+        [2, 5, 0, 3, 2, 3, 9, 2, 9, 8, 14, 7, 8, 9, 3, 2],
+        [9, 9, 5, 1, 4, 9, 6, 2, 9, 5, 14, 11, 9, 9, 3, 2],
+        [8, 5, 3, 2, 6, 3, 10, 12, 9, 5, 14, 7, 8, 9, 3, 2],
+        [1, 11, 3, 1, 3, 3, 1, 0, 11, 13, 3, 11, 1, 3, 11, 3],
+        [9, 0, 1, 9, 6, 6, 9, 12, 9, 10, 14, 7, 12, 9, 3, 2],
+        [8, 13, 7, 8, 6, 13, 8, 0, 14, 13, 15, 13, 8, 13, 7, 8],
+        [2, 10, 3, 2, 14, 3, 2, 2, 9, 10, 14, 7, 8, 9, 3, 2],
+        [2, 0, 4, 2, 4, 4, 2, 2, 9, 8, 14, 7, 8, 9, 3, 2],
+      ];
 
-        // Estado inicial de la MEF
-        let currentStateId = 0; // Inicia en 0. Normal
+      // 5. Función de Salida g (Reacción) - Matriz 16x16 (SIN CAMBIOS)
+      const g_OUTPUT = [
+        [0, 10, 9, 12, 3, 6, 4, 1, 7, 5, 0, 4, 1, 7, 9, 0],
+        [4, 4, 4, 11, 3, 11, 4, 0, 4, 4, 8, 4, 10, 14, 9, 1],
+        [0, 10, 4, 12, 3, 6, 3, 0, 3, 5, 0, 4, 1, 7, 9, 0],
+        [0, 4, 9, 12, 1, 6, 4, 0, 4, 4, 11, 9, 4, 11, 9, 12],
+        [0, 10, 4, 2, 3, 8, 4, 1, 3, 5, 13, 4, 10, 7, 9, 1],
+        [7, 10, 9, 12, 3, 6, 7, 1, 3, 5, 13, 4, 10, 7, 9, 0],
+        [1, 10, 4, 11, 3, 8, 0, 1, 4, 5, 14, 11, 10, 8, 9, 1],
+        [0, 4, 4, 12, 0, 6, 3, 1, 4, 4, 15, 4, 10, 14, 9, 12],
+        [0, 10, 4, 12, 3, 12, 3, 1, 3, 5, 0, 4, 1, 7, 9, 0],
+        [7, 10, 4, 11, 3, 2, 3, 0, 3, 5, 7, 12, 10, 7, 9, 0],
+        [1, 13, 9, 3, 11, 6, 0, 13, 7, 5, 13, 4, 10, 7, 9, 1],
+        [8, 12, 9, 8, 11, 6, 4, 4, 12, 14, 12, 9, 4, 11, 9, 12],
+        [7, 10, 8, 3, 11, 2, 3, 0, 7, 13, 0, 4, 10, 7, 9, 0],
+        [1, 15, 4, 3, 11, 6, 1, 0, 12, 15, 15, 4, 10, 14, 9, 1],
+        [0, 13, 12, 3, 11, 6, 0, 0, 7, 13, 0, 4, 1, 7, 9, 0],
+        [0, 10, 4, 3, 4, 4, 0, 0, 7, 5, 0, 4, 1, 7, 9, 0],
+      ];
 
-        // Referencias del DOM
-        const currentStateText = document.getElementById('current-state-text');
-        const outputMessage = document.getElementById('output-message');
-        const boyfriendImage = document.getElementById('boyfriend-image');
-        const displayDiv = document.getElementById('boyfriend-display');
-        const inputButtonsContainer = document.getElementById('input-buttons-container');
-        const stateList = document.getElementById('state-list');
-        const inputList = document.getElementById('input-list');
-        const outputList = document.getElementById('output-list');
+      // Estado inicial de la MEF
+      let currentStateId = 0; // Inicia en 0. Normal
 
+      // Referencias del DOM
+      const currentStateText = document.getElementById("current-state-text");
+      const outputMessage = document.getElementById("output-message");
+      const boyfriendImage = document.getElementById("boyfriend-image");
+      const displayDiv = document.getElementById("boyfriend-display");
+      const inputButtonsContainer = document.getElementById(
+        "input-buttons-container"
+      );
+      const stateList = document.getElementById("state-list");
+      const inputList = document.getElementById("input-list");
+      const outputList = document.getElementById("output-list");
 
-        // ===============================================
-        // FUNCIONES DE LA APLICACIÓN
-        // ===============================================
+      // ===============================================
+      // FUNCIONES DE LA APLICACIÓN
+      // ===============================================
 
-        /**
-         * Inicializa la interfaz de usuario y genera los botones de entrada.
-         */
-        function initializeUI() {
-            // Generar botones de entrada
-            inputButtonsContainer.innerHTML = INPUTS.map(input => `
+      /**
+       * Inicializa la interfaz de usuario y genera los botones de entrada.
+       */
+      function initializeUI() {
+        // Generar botones de entrada
+        inputButtonsContainer.innerHTML = INPUTS.map(
+          (input) => `
                 <button 
                     onclick="handleInput(${input.id})"
                     class="input-button bg-primary-pink text-white font-semibold py-3 px-4 rounded-xl hover:bg-pink-600 focus:outline-none focus:ring-4 focus:ring-pink-300 transform active:scale-95 transition duration-150 shadow-md whitespace-nowrap"
@@ -310,88 +364,108 @@
                 >
                     ${input.name}
                 </button>
-            `).join('');
+            `
+        ).join("");
 
-            // Llenar leyendas
-            stateList.innerHTML = STATES.map(s => `<li>${s.id}. ${s.name}</li>`).join('');
-            inputList.innerHTML = INPUTS.map(i => `<li>${i.id}. ${i.name}</li>`).join('');
-            outputList.innerHTML = OUTPUTS.map(o => `<li>${o.id}. ${o.name}</li>`).join('');
+        // Llenar leyendas
+        stateList.innerHTML = STATES.map(
+          (s) => `<li>${s.id}. ${s.name}</li>`
+        ).join("");
+        inputList.innerHTML = INPUTS.map(
+          (i) => `<li>${i.id}. ${i.name}</li>`
+        ).join("");
+        outputList.innerHTML = OUTPUTS.map(
+          (o) => `<li>${o.id}. ${o.name}</li>`
+        ).join("");
 
-            // Establecer el estado inicial en la interfaz
-            updateUI(currentStateId, "¡Bienvenido! Haz clic en una acción para interactuar.");
+        // Establecer el estado inicial en la interfaz
+        updateUI(
+          currentStateId,
+          "¡Bienvenido! Haz clic en una acción para interactuar."
+        );
+      }
+
+      /**
+       * Maneja una entrada del usuario, calcula la transición y actualiza el estado.
+       * @param {number} inputId - El ID de la entrada (0-15).
+       */
+      function handleInput(inputId) {
+        const S = currentStateId;
+        const I = inputId;
+
+        if (S >= f_NEXT_STATE.length || I >= f_NEXT_STATE[S].length) {
+          console.error(
+            `Error de transición: Estado ${S} o Entrada ${I} fuera de límites.`
+          );
+          outputMessage.textContent =
+            "¡Error! Transición no definida para este estado o entrada.";
+          return;
         }
 
-        /**
-         * Maneja una entrada del usuario, calcula la transición y actualiza el estado.
-         * @param {number} inputId - El ID de la entrada (0-15).
-         */
-        function handleInput(inputId) {
-            const S = currentStateId;
-            const I = inputId;
+        // 1. Calcular el Próximo Estado (Función f)
+        const nextStateId = f_NEXT_STATE[S][I];
 
-            if (S >= f_NEXT_STATE.length || I >= f_NEXT_STATE[S].length) {
-                console.error(`Error de transición: Estado ${S} o Entrada ${I} fuera de límites.`);
-                outputMessage.textContent = "¡Error! Transición no definida para este estado o entrada.";
-                return;
-            }
+        // 2. Calcular la Salida (Función g)
+        const outputId = g_OUTPUT[S][I];
+        const outputText =
+          OUTPUTS.find((o) => o.id === outputId)?.name || "Error de Salida";
 
-            // 1. Calcular el Próximo Estado (Función f)
-            const nextStateId = f_NEXT_STATE[S][I];
+        // 3. Actualizar el Estado Global
+        currentStateId = nextStateId;
 
-            // 2. Calcular la Salida (Función g)
-            const outputId = g_OUTPUT[S][I];
-            const outputText = OUTPUTS.find(o => o.id === outputId)?.name || "Error de Salida";
+        // 4. Actualizar la Interfaz de Usuario
+        updateUI(currentStateId, outputText);
+      }
 
-            // 3. Actualizar el Estado Global
-            currentStateId = nextStateId;
+      /**
+       * Actualiza los elementos visuales (estado, imagen y mensaje)
+       * @param {number} newStateId - El ID del nuevo estado.
+       * @param {string} message - El mensaje de la reacción.
+       */
+      function updateUI(newStateId, message) {
+        const newState = STATES.find((s) => s.id === newStateId);
+        const newStateName = newState?.name || "Desconocido";
+        const imageUrl =
+          newState?.imageUrl ||
+          "https://placehold.co/160x160/000000/ffffff?text=ERROR";
 
-            // 4. Actualizar la Interfaz de Usuario
-            updateUI(currentStateId, outputText);
+        // 1. Actualizar texto del estado y mensaje
+        currentStateText.textContent = `${newStateId}. ${newStateName}`;
+        outputMessage.textContent = message;
+
+        // 2. Aplicar la nueva imagen (directamente, sin carga de IA)
+        boyfriendImage.classList.add("animate-pulse-once"); // Simular una pequeña animación de reacción
+
+        boyfriendImage.onload = () => {
+          // Remover animación después de que la imagen se ha cargado
+          setTimeout(() => {
+            boyfriendImage.classList.remove("animate-pulse-once");
+          }, 500);
+        };
+
+        boyfriendImage.src = imageUrl;
+
+        // 3. Actualizar borde de color
+        const oldBorderClass = displayDiv.className.match(/border-state-\d+/);
+        if (oldBorderClass) {
+          displayDiv.classList.remove(oldBorderClass[0]);
         }
-
-        /**
-         * Actualiza los elementos visuales (estado, imagen y mensaje)
-         * @param {number} newStateId - El ID del nuevo estado.
-         * @param {string} message - El mensaje de la reacción.
-         */
-        function updateUI(newStateId, message) {
-            const newState = STATES.find(s => s.id === newStateId);
-            const newStateName = newState?.name || 'Desconocido';
-            const imageUrl = newState?.imageUrl || 'https://placehold.co/160x160/000000/ffffff?text=ERROR';
-            
-            // 1. Actualizar texto del estado y mensaje
-            currentStateText.textContent = `${newStateId}. ${newStateName}`;
-            outputMessage.textContent = message;
-            
-            // 2. Aplicar la nueva imagen (directamente, sin carga de IA)
-            boyfriendImage.classList.add('animate-pulse-once'); // Simular una pequeña animación de reacción
-            
-            boyfriendImage.onload = () => {
-                // Remover animación después de que la imagen se ha cargado
-                setTimeout(() => {
-                    boyfriendImage.classList.remove('animate-pulse-once');
-                }, 500);
-            };
-            
-            boyfriendImage.src = imageUrl;
-            
-            // 3. Actualizar borde de color
-            const oldBorderClass = displayDiv.className.match(/border-state-\d+/);
-            if (oldBorderClass) {
-                displayDiv.classList.remove(oldBorderClass[0]);
-            }
-            const newBorderClass = `border-state-${newStateId}`;
-            // Comprueba si la clase de estilo existe antes de añadirla (solo para los estados principales)
-            if (document.head.querySelector(`style`).innerHTML.includes(newBorderClass)) {
-                displayDiv.classList.add(newBorderClass);
-            } else {
-                 displayDiv.classList.add('border-primary-pink'); // Fallback color
-            }
+        const newBorderClass = `border-state-${newStateId}`;
+        // Comprueba si la clase de estilo existe antes de añadirla (solo para los estados principales)
+        if (
+          document.head
+            .querySelector(`style`)
+            .innerHTML.includes(newBorderClass)
+        ) {
+          displayDiv.classList.add(newBorderClass);
+        } else {
+          displayDiv.classList.add("border-primary-pink"); // Fallback color
         }
+      }
 
-        // Agregar la animación CSS para el efecto de reacción
-        const style = document.createElement('style');
-        style.innerHTML += `
+      // Agregar la animación CSS para el efecto de reacción
+      const style = document.createElement("style");
+      style.innerHTML += `
             @keyframes pulse-once {
                 0% { transform: scale(1); }
                 50% { transform: scale(1.05); }
@@ -401,11 +475,9 @@
                 animation: pulse-once 0.5s ease-in-out;
             }
         `;
-        document.head.appendChild(style);
+      document.head.appendChild(style);
 
-
-        window.onload = initializeUI;
+      window.onload = initializeUI;
     </script>
-
-</body>
+  </body>
 </html>
